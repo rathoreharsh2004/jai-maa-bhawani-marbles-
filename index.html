@@ -1,218 +1,346 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jai Maa Bhawani Marbles</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Poppins:wght@300;400;500;600&display=swap');
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-        .brand-font {
-            font-family: 'Playfair Display', serif;
-        }
-    </style>
-</head>
-<body class="bg-white text-gray-800">
+import React, { useState } from 'react';
+import { ShoppingCart, User, Search, Phone, MapPin, ChevronRight, ChevronLeft, Star, CheckCircle, Menu, X, MessageCircle } from 'lucide-react';
 
-    <!-- Top Announcement Bar -->
-    <div class="bg-amber-900 text-white text-xs py-2 px-4 overflow-hidden whitespace-nowrap">
-        <div class="inline-block animate-marquee space-x-12">
-            <span>10% OFF ON FIRST ORDER USE COUPON: NEW10</span>
-            <span>•</span>
-            <span>Enjoy 10% Off On Purchase Above 9999/-</span>
-            <span>•</span>
-            <span>Enjoy 15% Off On Purchase Above 14999/-</span>
-            <span>•</span>
-            <span>Enjoy 20% Off On Purchase Above 19999/-</span>
+export default function App() {
+  const [currentPage, setCurrentPage] = useState(4);
+  const [cartCount, setCartCount] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Sample products data mimicking the video pages
+  const productsData = {
+    4: [
+      { id: 1, name: 'Floating Blossom Marble Large Size Bowl', price: 2000, oldPrice: 4000, discount: 'Save 50%', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=500' },
+      { id: 2, name: 'White & Gold Marble Tic Tac Toe Game', price: 3000, oldPrice: 4000, discount: 'Save 25%', img: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=500' },
+      { id: 3, name: 'Marble Tic Tac Toe Game Premium', price: 3000, oldPrice: 5000, discount: 'Save 40%', img: 'https://images.unsplash.com/photo-1615529162924-f8605388461d?auto=format&fit=crop&q=80&w=500' },
+      { id: 4, name: 'Green Marble Ashtray', price: 1200, oldPrice: 2000, discount: 'Save 40%', img: 'https://images.unsplash.com/photo-1567016432779-094069958ea5?auto=format&fit=crop&q=80&w=500' },
+      { id: 5, name: 'Black Marble Ashtray', price: 1200, oldPrice: 2000, discount: 'Save 40%', img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=500' },
+      { id: 6, name: 'Modern White Marble Modern Sculpture', price: 20000, oldPrice: 35000, discount: 'Save 20%', img: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&q=80&w=500' },
+      { id: 7, name: 'Handcrafted White Marble Art Minimalist', price: 22000, oldPrice: 35000, discount: 'Save 37%', img: 'https://images.unsplash.com/photo-1544457070-4cd773b4d71e?auto=format&fit=crop&q=80&w=500' },
+      { id: 8, name: 'Contemporary Marble Art Piece Abstract', price: 18000, oldPrice: 30000, discount: 'Save 40%', img: 'https://images.unsplash.com/photo-1582582621959-48d27397dc69?auto=format&fit=crop&q=80&w=500' },
+    ],
+    5: [
+      { id: 9, name: 'Artistic Marble Sculpture for Luxury Living', price: 19500, oldPrice: 30000, discount: 'Save 35%', img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=500' },
+      { id: 10, name: 'Elegant Marble Abstract Decor Showpiece', price: 17000, oldPrice: 30000, discount: 'Save 43%', img: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=500' },
+      { id: 11, name: 'Statement White Marble Modern Art', price: 19500, oldPrice: 25000, discount: 'Save 22%', img: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=80&w=500' },
+      { id: 12, name: 'Contemporary Abstract Decor Pillar', price: 16000, oldPrice: 25000, discount: 'Save 36%', img: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&q=80&w=500' },
+    ],
+    6: [
+      { id: 13, name: 'Scalloped Round Candle Holder', price: 2000, oldPrice: 4000, discount: 'Save 50%', img: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&q=80&w=500' },
+      { id: 14, name: 'Bidasar Bloom Scallop Candle Holder', price: 2000, oldPrice: 4000, discount: 'Save 50%', img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=500' },
+      { id: 15, name: 'Marble Sanctuary Fountain & Pillar', price: 45000, oldPrice: 60000, discount: 'Save 25%', img: 'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&q=80&w=500' },
+      { id: 16, name: 'Divine Handcrafted Marble Mandir', price: 35000, oldPrice: 50000, discount: 'Save 30%', img: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=500' },
+    ]
+  };
+
+  const handleAddToCart = (product) => {
+    setCartCount(cartCount + 1);
+    alert(`${product.name} added to cart!`);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
+      
+      {/* Top Announcement Bar */}
+      <div className="bg-stone-800 text-white text-xs sm:text-sm py-2 px-4 text-center overflow-hidden whitespace-nowrap">
+        <span>10% OFF ON FIRST ORDER USE COUPON: NEW10 | Enjoy 10% Off On Purchase Above 9999/- | Enjoy 15% Off On Purchase Above 14999/-</span>
+      </div>
+
+      {/* Header / Navbar */}
+      <header className="sticky top-0 z-50 bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+          
+          {/* Mobile Menu Button */}
+          <button className="md:hidden text-gray-700" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+
+          {/* Brand Logo */}
+          <div className="flex flex-col items-center">
+            <h1 className="text-xl sm:text-2xl font-serif font-bold tracking-wider text-stone-900">Jai Maa Bhawani Marbles</h1>
+            <p className="text-[10px] tracking-widest text-stone-500 uppercase">Earth to Art, Home to Grace</p>
+          </div>
+
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex space-x-6 text-sm font-medium text-stone-700 uppercase tracking-wider">
+            <a href="#home" className="hover:text-amber-700 transition">Home</a>
+            <a href="#products" className="hover:text-amber-700 transition">Decor</a>
+            <a href="#products" className="hover:text-amber-700 transition">Marble Moortis</a>
+            <a href="#products" className="hover:text-amber-700 transition">Mandirs</a>
+            <a href="#products" className="hover:text-amber-700 transition">Fountains</a>
+            <a href="#products" className="hover:text-amber-700 transition">Pillars</a>
+            <a href="#about" className="hover:text-amber-700 transition">About Us</a>
+            <a href="#contact" className="hover:text-amber-700 transition">Contact</a>
+          </nav>
+
+          {/* Icons (Search, User, Cart) */}
+          <div className="flex items-center space-x-4">
+            <div className="hidden lg:flex items-center border border-gray-300 rounded-full px-3 py-1 bg-gray-50">
+              <Search size={16} className="text-gray-400 mr-2" />
+              <input 
+                type="text" 
+                placeholder="Search marble products..." 
+                className="bg-transparent text-xs focus:outline-none w-32"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <User size={20} className="cursor-pointer text-gray-700 hover:text-stone-900" />
+            <div className="relative cursor-pointer">
+              <ShoppingCart size={20} className="text-gray-700 hover:text-stone-900" />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-amber-700 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </div>
+          </div>
         </div>
+
+        {/* Mobile Nav Drawer */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white border-b px-4 py-4 space-y-3">
+            <a href="#home" className="block text-sm font-medium uppercase" onClick={() => setMobileMenuOpen(false)}>Home</a>
+            <a href="#products" className="block text-sm font-medium uppercase" onClick={() => setMobileMenuOpen(false)}>Decor & Moortis</a>
+            <a href="#products" className="block text-sm font-medium uppercase" onClick={() => setMobileMenuOpen(false)}>Mandirs</a>
+            <a href="#products" className="block text-sm font-medium uppercase" onClick={() => setMobileMenuOpen(false)}>Fountains & Pillars</a>
+            <a href="#about" className="block text-sm font-medium uppercase" onClick={() => setMobileMenuOpen(false)}>About Us</a>
+            <a href="#contact" className="block text-sm font-medium uppercase" onClick={() => setMobileMenuOpen(false)}>Contact</a>
+          </div>
+        )}
+      </header>
+
+      {/* Hero Section */}
+      <section id="home" className="relative bg-stone-900 text-white py-24 px-6 text-center bg-cover bg-center" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1600')` }}>
+        <div className="max-w-3xl mx-auto space-y-6">
+          <h2 className="text-4xl sm:text-5xl font-serif font-bold">Exquisite Handcrafted Marble Masterpieces</h2>
+          <p className="text-lg text-gray-200">Transform your living spaces with divine marble moortis, elegant temples, luxurious pillars, and artisanal home decor.</p>
+          <div className="flex justify-center gap-4">
+            <a href="#products" className="bg-amber-700 hover:bg-amber-800 text-white px-8 py-3 rounded-md font-medium transition shadow-lg">Explore Collection</a>
+            <a href="https://wa.me/919461377026" target="_blank" rel="noopener noreferrer" className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-md font-medium transition shadow-lg flex items-center gap-2">
+              <MessageCircle size={20} /> Chat on WhatsApp
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Us Section */}
+      <section className="py-16 bg-white max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h3 className="text-3xl font-serif font-bold text-stone-900">Why Choose Jai Maa Bhawani Marbles?</h3>
+          <p className="text-gray-600 mt-2">Crafting timeless beauty with perfection and devotion.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="p-6 bg-stone-50 rounded-xl text-center shadow-sm">
+            <CheckCircle className="mx-auto text-amber-700 mb-4" size={40} />
+            <h4 className="font-bold text-lg mb-2">100% Pure Premium Marble</h4>
+            <p className="text-sm text-gray-600">Hand-selected high-grade marble blocks sculpted by master artisans from Rajasthan.</p>
+          </div>
+          <div className="p-6 bg-stone-50 rounded-xl text-center shadow-sm">
+            <CheckCircle className="mx-auto text-amber-700 mb-4" size={40} />
+            <h4 className="font-bold text-lg mb-2">Custom Sculpting Available</h4>
+            <p className="text-sm text-gray-600">We customize statues, mandirs, and pillars according to your exact spiritual & architectural dimensions.</p>
+          </div>
+          <div className="p-6 bg-stone-50 rounded-xl text-center shadow-sm">
+            <CheckCircle className="mx-auto text-amber-700 mb-4" size={40} />
+            <h4 className="font-bold text-lg mb-2">Safe Worldwide & Pan-India Shipping</h4>
+            <p className="text-sm text-gray-600">Secure wooden crate packaging ensuring damage-free delivery right to your doorstep.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Main Products Section with Pagination (As shown in video) */}
+      <section id="products" className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center mb-8 border-b pb-4">
+          <span className="text-lg font-semibold text-stone-700">219 products available</span>
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-gray-500">Sort by:</span>
+            <select className="border border-gray-300 rounded px-3 py-1 text-sm bg-white focus:outline-none">
+              <option>Featured</option>
+              <option>Price: Low to High</option>
+              <option>Price: High to Low</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Product Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {(productsData[currentPage] || productsData[4]).map((product) => (
+            <div key={product.id} className="bg-white border rounded-lg overflow-hidden group shadow-sm hover:shadow-md transition">
+              <div className="relative overflow-hidden bg-gray-100 h-64">
+                <span className="absolute top-2 left-2 bg-black text-white text-xs px-2 py-1 font-medium z-10">{product.discount}</span>
+                <img src={product.img} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+                <button 
+                  onClick={() => handleAddToCart(product)}
+                  className="absolute bottom-3 left-3 right-3 bg-stone-900 text-white text-xs py-2 opacity-0 group-hover:opacity-100 transition duration-300 rounded shadow"
+                >
+                  Quick view & Add
+                </button>
+              </div>
+              <div className="p-4">
+                <h5 className="text-sm font-medium text-stone-800 truncate">{product.name}</h5>
+                <div className="mt-2 flex items-center space-x-2">
+                  <span className="text-stone-900 font-bold">Rs. {product.price.toLocaleString()}</span>
+                  <span className="text-gray-400 text-xs line-through">Rs. {product.oldPrice.toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Pagination as shown in video (Page 4, 5, 6, etc.) */}
+        <div className="flex justify-center items-center space-x-2 mt-12">
+          <button 
+            onClick={() => setCurrentPage(prev => Math.max(4, prev - 1))}
+            className="p-2 border rounded hover:bg-gray-100 disabled:opacity-50"
+            disabled={currentPage === 4}
+          >
+            <ChevronLeft size={18} />
+          </button>
+          {[4, 5, 6, 7, 8, 9, 10].map((num) => (
+            <button
+              key={num}
+              onClick={() => setCurrentPage(num)}
+              className={`px-4 py-2 border rounded text-sm font-medium ${currentPage === num ? 'bg-stone-900 text-white' : 'hover:bg-gray-100'}`}
+            >
+              {num}
+            </button>
+          ))}
+          <button 
+            onClick={() => setCurrentPage(prev => Math.min(10, prev + 1))}
+            className="p-2 border rounded hover:bg-gray-100"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+      </section>
+
+      {/* About Us Section */}
+      <section id="about" className="bg-stone-100 py-16 px-4 sm:px-6 lg:px-8 mt-12">
+        <div className="max-w-4xl mx-auto text-center space-y-6">
+          <h3 className="text-3xl font-serif font-bold text-stone-900">About Jai Maa Bhawani Marbles</h3>
+          <p className="text-gray-700 leading-relaxed">
+            Located in the heart of artistry, Jai Maa Bhawani Marbles brings you the finest selection of hand-carved marble artifacts, magnificent deities (Moortis), sacred home mandirs, elegant water fountains, and majestic architectural pillars. Every single piece is meticulously crafted by generational artisans who breathe life into pure white marble.
+          </p>
+        </div>
+      </section>
+
+      {/* Customer Reviews Section */}
+      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h3 className="text-3xl font-serif font-bold text-stone-900">What Our Customers Say</h3>
+          <p className="text-gray-600 mt-2">Trusted by thousands of art lovers and spiritual homes.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="flex text-amber-500 mb-2">
+              {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
+            </div>
+            <p className="text-sm text-gray-600 mb-4">"We ordered a custom Marble Mandir and Marble Moorti for our new home. The finishing and detailing are beyond exceptional!"</p>
+            <h5 className="font-bold text-sm">— Rajesh Sharma, Jaipur</h5>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="flex text-amber-500 mb-2">
+              {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
+            </div>
+            <p className="text-sm text-gray-600 mb-4">"The marble fountain looks stunning in our courtyard. Impeccable packaging and prompt customer support via WhatsApp."</p>
+            <h5 className="font-bold text-sm">— Priya Mehta, Mumbai</h5>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="flex text-amber-500 mb-2">
+              {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
+            </div>
+            <p className="text-sm text-gray-600 mb-4">"Genuine quality marble and classic craftsmanship. Highly recommend Jai Maa Bhawani Marbles for luxury decor."</p>
+            <h5 className="font-bold text-sm">— Vikramaditya Singh, Delhi</h5>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="bg-stone-50 py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <h3 className="text-3xl font-serif font-bold text-stone-900 text-center mb-8">Frequently Asked Questions</h3>
+          <div className="space-y-4">
+            <details className="bg-white p-4 rounded shadow-sm border">
+              <summary className="font-semibold cursor-pointer">Do you take custom orders for Marble Moortis and Mandirs?</summary>
+              <p className="text-sm text-gray-600 mt-2">Yes, we specialize in custom-sized marble sculptures, temples, and pillars as per your exact specifications.</p>
+            </details>
+            <details className="bg-white p-4 rounded shadow-sm border">
+              <summary className="font-semibold cursor-pointer">How can I place an order or inquire via WhatsApp?</summary>
+              <p className="text-sm text-gray-600 mt-2">You can directly click our WhatsApp button or call us at +91 94613 77026 for instant booking and catalogs.</p>
+            </details>
+            <details className="bg-white p-4 rounded shadow-sm border">
+              <summary className="font-semibold cursor-pointer">Is safe delivery guaranteed for fragile marble items?</summary>
+              <p className="text-sm text-gray-600 mt-2">Absolutely! All items are packed in heavy-duty wooden crates with multiple layers of foam protection.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      {/* Enquiry / Contact & Map Section */}
+      <section id="contact" className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div>
+            <h3 className="text-2xl font-serif font-bold text-stone-900 mb-4">Get in Touch With Us</h3>
+            <p className="text-gray-600 mb-6">Have questions about custom marble designs or bulk orders? Reach out to us directly.</p>
+            <ul className="space-y-4 text-sm text-gray-700">
+              <li className="flex items-center gap-3"><Phone className="text-amber-700" size={18} /> +91 94613 77026</li>
+              <li className="flex items-center gap-3"><MapPin className="text-amber-700" size={18} /> Marble Industrial Area, Makrana / Jaipur, Rajasthan</li>
+            </ul>
+            <div className="mt-6 flex gap-4">
+              <a href="https://wa.me/919461377026" target="_blank" rel="noopener noreferrer" className="bg-green-600 text-white px-6 py-2.5 rounded font-medium flex items-center gap-2 hover:bg-green-700 transition">
+                <MessageCircle size={18} /> WhatsApp Us Now
+              </a>
+            </div>
+          </div>
+          <div className="h-80 bg-gray-200 rounded-lg overflow-hidden border shadow-sm flex items-center justify-center">
+            <iframe 
+              title="Location Map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3559.789123456!2d75.7873!3d26.9124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwNTUnMzQuNyJOIDc1wrA0NycxNC4zIkU!5e0!3m2!1sen!2sin!4v1600000000000!5m2!1sen!2sin" 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen="" 
+              loading="lazy">
+            </iframe>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-stone-800 text-white pt-12 pb-6 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-stone-700">
+          <div>
+            <h4 className="font-serif font-bold text-lg mb-4">Jai Maa Bhawani Marbles</h4>
+            <p className="text-xs text-stone-400">Earth to Art, Home to Grace. Premium marble statues, mandirs, and luxury decor crafted with perfection.</p>
+            <p className="mt-3 text-xs text-stone-300">Helpline / WhatsApp: +91 94613 77026</p>
+          </div>
+          <div>
+            <h5 className="font-bold text-sm uppercase mb-4 tracking-wider">Quick Links</h5>
+            <ul className="space-y-2 text-xs text-stone-300">
+              <li><a href="#home" className="hover:text-white">Home</a></li>
+              <li><a href="#about" className="hover:text-about">About Us</a></li>
+              <li><a href="#products" className="hover:text-white">Marble Moortis & Mandirs</a></li>
+              <li><a href="#contact" className="hover:text-white">Contact Us</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5 className="font-bold text-sm uppercase mb-4 tracking-wider">Sign Up & Save</h5>
+            <p className="text-xs text-stone-400 mb-3">Subscribe today and enjoy exclusive discounts, free giveaways, and special offers.</p>
+            <div className="flex">
+              <input type="email" placeholder="Enter your email" className="bg-stone-900 border border-stone-700 text-xs px-3 py-2 rounded-l focus:outline-none w-full text-white" />
+              <button className="bg-amber-700 hover:bg-amber-800 px-4 py-2 text-xs rounded-r font-medium">Subscribe</button>
+            </div>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto mt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-stone-400">
+          <p>© 2026 Jai Maa Bhawani Marbles. All Rights Reserved.</p>
+          <div className="flex space-x-4 mt-4 sm:mt-0">
+            <a href="#privacy" className="hover:underline">Privacy Policy</a>
+            <a href="#terms" className="hover:underline">Terms & Conditions</a>
+          </div>
+        </div>
+      </footer>
     </div>
-
-    <!-- Main Header -->
-    <header class="border-b border-gray-200 sticky top-0 bg-white z-50">
-        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-            <!-- Navigation Links Left -->
-            <nav class="hidden lg:flex space-x-6 text-xs uppercase tracking-wider font-medium text-gray-700">
-                <a href="#" class="hover:text-amber-900 transition">Decor</a>
-                <a href="#" class="hover:text-amber-900 transition">Sale</a>
-                <a href="#" class="hover:text-amber-900 transition">Bath</a>
-                <a href="#" class="hover:text-amber-900 transition">Kitchenware</a>
-                <a href="#" class="hover:text-amber-900 transition">Tableware</a>
-                <a href="#" class="hover:text-amber-900 transition">Gifting</a>
-                <a href="#" class="hover:text-amber-900 transition">Luxe</a>
-                <a href="#" class="hover:text-amber-900 transition">Shop All</a>
-            </nav>
-
-            <!-- Brand Logo / Name -->
-            <div class="text-center">
-                <a href="#" class="inline-block">
-                    <h1 class="brand-font text-2xl md:text-3xl font-bold tracking-wide text-amber-900">Jai Maa Bhawani Marbles</h1>
-                    <span class="text-[9px] uppercase tracking-widest text-gray-500 block">Earth to art, carved in stone</span>
-                </a>
-            </div>
-
-            <!-- Right Icons -->
-            <div class="flex items-center space-x-4 text-gray-700">
-                <span class="hidden md:inline text-xs">Welcome to Jai Maa Bhawani Marbles</span>
-                <a href="#" class="hover:text-amber-900"><i class="fa-solid fa-magnifying-glass text-lg"></i></a>
-                <a href="#" class="hover:text-amber-900"><i class="fa-regular fa-user text-lg"></i></a>
-                <a href="#" class="hover:text-amber-900 relative">
-                    <i class="fa-solid fa-bag-shopping text-lg"></i>
-                    <span class="absolute -top-2 -right-2 bg-amber-900 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">0</span>
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <!-- Sub Navigation / Categories Bar -->
-    <div class="bg-gray-50 border-b border-gray-200 py-2 px-4 hidden md:block">
-        <div class="container mx-auto flex justify-between items-center text-xs text-gray-600">
-            <span>219 products</span>
-            <div class="flex items-center space-x-4">
-                <span class="text-gray-400">Coasters</span>
-                <div class="flex items-center border border-gray-300 bg-white px-3 py-1 rounded">
-                    <span>Featured</span>
-                    <i class="fa-solid fa-chevron-down ml-2 text-[10px]"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Product Grid Section -->
-    <main class="container mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            <!-- Product 1 -->
-            <div class="group relative">
-                <div class="relative bg-gray-100 aspect-square overflow-hidden">
-                    <span class="absolute top-2 left-2 bg-black text-white text-[10px] font-semibold px-2 py-1 uppercase tracking-wider z-10">Save 50%</span>
-                    <img src="https://images.unsplash.com/photo-1615529162924-f8605388461d?auto=format&fit=crop&q=80&w=600" alt="Marble Tray" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                    <button class="absolute bottom-2 left-2 right-2 bg-black/80 hover:bg-black text-white text-xs py-2 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition duration-300">Quick view</button>
-                </div>
-                <div class="mt-3 text-center">
-                    <h3 class="text-sm font-medium text-gray-800">Floating Blossom Marble Large Size...</h3>
-                    <div class="mt-1 flex items-center justify-center space-x-2 text-xs">
-                        <span class="font-semibold text-gray-900">Rs. 2,000.00</span>
-                        <span class="text-gray-400 line-through">Rs. 4,000.00</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 2 -->
-            <div class="group relative">
-                <div class="relative bg-gray-100 aspect-square overflow-hidden">
-                    <span class="absolute top-2 left-2 bg-black text-white text-[10px] font-semibold px-2 py-1 uppercase tracking-wider z-10">Save 25%</span>
-                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=600" alt="White & Gold Marble" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                    <button class="absolute bottom-2 left-2 right-2 bg-black/80 hover:bg-black text-white text-xs py-2 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition duration-300">Quick view</button>
-                </div>
-                <div class="mt-3 text-center">
-                    <h3 class="text-sm font-medium text-gray-800">White & Gold Marble Tic...</h3>
-                    <div class="mt-1 flex items-center justify-center space-x-2 text-xs">
-                        <span class="font-semibold text-gray-900">Rs. 3,000.00</span>
-                        <span class="text-gray-400 line-through">Rs. 4,000.00</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 3 -->
-            <div class="group relative">
-                <div class="relative bg-gray-100 aspect-square overflow-hidden">
-                    <span class="absolute top-2 left-2 bg-black text-white text-[10px] font-semibold px-2 py-1 uppercase tracking-wider z-10">Save 40%</span>
-                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600" alt="Marble Tic Tac Toe" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                    <button class="absolute bottom-2 left-2 right-2 bg-black/80 hover:bg-black text-white text-xs py-2 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition duration-300">Quick view</button>
-                </div>
-                <div class="mt-3 text-center">
-                    <h3 class="text-sm font-medium text-gray-800">Marble Tic Tac Toe Game...</h3>
-                    <div class="mt-1 flex items-center justify-center space-x-2 text-xs">
-                        <span class="font-semibold text-gray-900">Rs. 3,000.00</span>
-                        <span class="text-gray-400 line-through">Rs. 5,000.00</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 4 -->
-            <div class="group relative">
-                <div class="relative bg-gray-100 aspect-square overflow-hidden">
-                    <span class="absolute top-2 left-2 bg-black text-white text-[10px] font-semibold px-2 py-1 uppercase tracking-wider z-10">Save 40%</span>
-                    <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&q=80&w=600" alt="Green Marble Ashtray" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                    <button class="absolute bottom-2 left-2 right-2 bg-black/80 hover:bg-black text-white text-xs py-2 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition duration-300">Quick view</button>
-                </div>
-                <div class="mt-3 text-center">
-                    <h3 class="text-sm font-medium text-gray-800">Green Marble Ashtray</h3>
-                    <div class="mt-1 flex items-center justify-center space-x-2 text-xs">
-                        <span class="font-semibold text-gray-900">Rs. 1,200.00</span>
-                        <span class="text-gray-400 line-through">Rs. 2,000.00</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Pagination -->
-        <div class="flex justify-center items-center space-x-3 mt-12 text-sm">
-            <span class="font-semibold px-3 py-1 bg-gray-200">1</span>
-            <a href="#" class="px-3 py-1 hover:bg-gray-100">2</a>
-            <a href="#" class="px-3 py-1 hover:bg-gray-100">3</a>
-            <a href="#" class="px-3 py-1 hover:bg-gray-100">4</a>
-            <a href="#" class="px-3 py-1 hover:bg-gray-100">5</a>
-            <span>...</span>
-            <a href="#" class="px-3 py-1 hover:bg-gray-100">10</a>
-            <a href="#" class="px-3 py-1 hover:bg-gray-100"><i class="fa-solid fa-chevron-right text-xs"></i></a>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-[#55633a] text-white mt-16 pt-12 pb-6">
-        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 pb-12 border-b border-white/20">
-            <div>
-                <h3 class="font-bold text-base mb-4 tracking-wider uppercase">Quick Links</h3>
-                <ul class="space-y-2 text-sm text-gray-200">
-                    <li><a href="#" class="hover:underline">Home</a></li>
-                    <li><a href="#" class="hover:underline">About Us</a></li>
-                    <li><a href="#" class="hover:underline">Our Products</a></li>
-                    <li><a href="#" class="hover:underline">Contact Us</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3 class="font-bold text-base mb-4 tracking-wider uppercase">Our Collection</h3>
-                <ul class="space-y-2 text-sm text-gray-200">
-                    <li><a href="#" class="hover:underline">Home Decor</a></li>
-                    <li><a href="#" class="hover:underline">Bathroom Set</a></li>
-                    <li><a href="#" class="hover:underline">Kitchen Set</a></li>
-                    <li><a href="#" class="hover:underline">All products</a></li>
-                    <li><a href="#" class="hover:underline">Sculpture</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3 class="font-bold text-base mb-4 tracking-wider uppercase">Sign Up And Save</h3>
-                <p class="text-sm text-gray-200 mb-4">Subscribe today and enjoy exclusive discounts, free giveaways, and special offers crafted just for you.</p>
-                <div class="flex items-center bg-white/10 border border-white/30 rounded p-1">
-                    <input type="email" placeholder="Enter your email" class="bg-transparent px-3 py-1 text-sm text-white placeholder-gray-300 focus:outline-none w-full">
-                    <button class="text-white px-3 py-1"><i class="fa-regular fa-envelope"></i></button>
-                </div>
-            </div>
-        </div>
-        <div class="container mx-auto px-4 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-200">
-            <div class="flex space-x-6 mb-4 md:mb-0">
-                <a href="#" class="hover:underline">Privacy Policy</a>
-                <a href="#" class="hover:underline">Return Policy</a>
-                <a href="#" class="hover:underline">Shipping Policy</a>
-                <a href="#" class="hover:underline">Terms & Condition</a>
-            </div>
-            <div>
-                <p>© 2026 Jai Maa Bhawani Marbles. Designed & Developed</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/919461377026" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition z-50 text-2xl">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
-
-</body>
-</html>
+  );
+}
